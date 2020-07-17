@@ -9,25 +9,25 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_TO_CART:
-      const addProduct = action.product;
-      const prodPrice = addProduct.price;
-      const prodTitle = addProduct.title;
+      const addedProduct = action.product;
+      const prodPrice = addedProduct.price;
+      const prodTitle = addedProduct.title;
 
       let updatedOrNewCartItem;
-      if (state.items[addProduct.id]) {
+      if (state.items[addedProduct.id]) {
         // already have the item in the cart
         updatedOrNewCartItem = new CartItem(
-          state.items[addProduct.id].quantity + 1,
+          state.items[addedProduct.id].quantity + 1,
           prodPrice,
           prodTitle,
-          tate.items[addProduct.id].sum + prodPrice
+          state.items[addedProduct.id].sum + prodPrice
         );
       } else {
         updatedOrNewCartItem = new CartItem(1, prodPrice, prodTitle, prodPrice);
       }
       return {
         ...state,
-        items: { ...state.items, [addProduct.id]: updatedOrNewCartItem },
+        items: { ...state.items, [addedProduct.id]: updatedOrNewCartItem },
         totalAmount: state.totalAmount + prodPrice,
       };
   }
