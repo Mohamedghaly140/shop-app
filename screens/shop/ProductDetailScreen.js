@@ -1,6 +1,14 @@
 import React from 'react';
-import { StyleSheet, ScrollView, View, Text, Button } from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  Button,
+  Image,
+} from 'react-native';
 import { useSelector } from 'react-redux';
+import Colors from '../../constants/Color';
 
 const ProductDetailScreen = props => {
   const productId = props.navigation.getParam('productId');
@@ -8,9 +16,14 @@ const ProductDetailScreen = props => {
     state.products.availableProducts.find(prod => prod.id === productId)
   );
   return (
-    <View>
-      <Text>{selectedProduct.title}</Text>
-    </View>
+    <ScrollView>
+      <Image style={styles.image} source={{ uri: selectedProduct.imageUrl }} />
+      <View style={styles.action}>
+        <Button title='Add to Cart' color={Colors.primary} onPress={() => {}} />
+      </View>
+      <Text style={styles.price}>${selectedProduct.price}</Text>
+      <Text style={styles.description}>{selectedProduct.description}</Text>
+    </ScrollView>
   );
 };
 
@@ -21,6 +34,28 @@ ProductDetailScreen.navigationOptions = navData => {
   };
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: 300,
+  },
+  action: {
+    marginVertical: 10,
+    alignItems: 'center',
+  },
+  price: {
+    fontSize: 20,
+    color: '#888',
+    textAlign: 'center',
+    marginVertical: 20,
+    fontFamily: 'open-sans-bold',
+  },
+  description: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginHorizontal: 20,
+    fontFamily: 'open-sans',
+  },
+});
 
 export default ProductDetailScreen;
