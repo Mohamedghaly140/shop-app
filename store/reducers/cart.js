@@ -31,21 +31,21 @@ export default (state = initialState, action) => {
         totalAmount: state.totalAmount + prodPrice,
       };
     case REMOVE_FROM_CART:
-      const selectedCartItem = state.items[action.pId];
+      const selectedCartItem = state.items[action.pid];
       const currentQuantity = selectedCartItem.quantity;
       let updatedCartItems;
       if (currentQuantity > 1) {
         // need to reduce it, not erase it
-        const updatedCartItems = new CartItem(
+        const updatedCartItem = new CartItem(
           selectedCartItem.quantity - 1,
-          selectedCartItem.productTitle,
           selectedCartItem.productPrice,
+          selectedCartItem.productTitle,
           selectedCartItem.sum - selectedCartItem.productPrice
         );
-        updatedCartItems = { ...state.items, [action.pId]: updatedCartItems };
+        updatedCartItems = { ...state.items, [action.pid]: updatedCartItem };
       } else {
         updatedCartItems = { ...state.items };
-        delete updatedCartItems[action.pId];
+        delete updatedCartItems[action.pid];
       }
       return {
         ...state,
