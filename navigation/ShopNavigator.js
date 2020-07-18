@@ -35,7 +35,7 @@ const ProductsNavigator = createStackNavigator(
   {
     defaultNavigationOptions: defaultNavOptions,
     navigationOptions: {
-      draweIcon: drawerConfig => (
+      drawerIcon: drawerConfig => (
         <Ionicons
           name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
           size={23}
@@ -53,7 +53,7 @@ const OrdersNavigator = createStackNavigator(
   {
     defaultNavigationOptions: defaultNavOptions,
     navigationOptions: {
-      draweIcon: drawerConfig => (
+      drawerIcon: drawerConfig => (
         <Ionicons
           name={Platform.OS === 'android' ? 'md-list' : 'ios-list'}
           size={23}
