@@ -5,6 +5,7 @@ import Colors from '../../constants/Color';
 import CartItem from '../../components/shop/CartItem';
 import * as cartActions from '../../store/actions/cart';
 import * as ordersActions from '../../store/actions/orders';
+import { round } from 'react-native-reanimated';
 
 const CartScreen = props => {
   const cartTotalAmount = useSelector(state => state.cart.totalAmount);
@@ -30,7 +31,9 @@ const CartScreen = props => {
       <View style={styles.summary}>
         <Text style={styles.summaryText}>
           Total:
-          <Text style={styles.amount}>${cartTotalAmount.toFixed(2)}</Text>
+          <Text style={styles.amount}>
+            $ {Math.round(cartTotalAmount.toFixed(2) * 100) / 100}
+          </Text>
         </Text>
         <Button
           title='Order Now'
