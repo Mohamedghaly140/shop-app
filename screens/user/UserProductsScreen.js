@@ -1,14 +1,16 @@
 import React from 'react';
 import { FlatList, Platform, Button } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../../components/UI/HeaderButton';
 import ProductItem from '../../components/shop/ProductItem';
 import Colors from '../../constants/Color';
+import * as productActions from '../../store/actions/products';
 
 const UserProductsScreen = props => {
   const userProducts = useSelector(state => state.products.userProducts);
+  const dispatch = useDispatch();
 
   const editProductHandler = id => {
     props.navigation.navigate('EditProduct', { productId: id });
@@ -26,13 +28,19 @@ const UserProductsScreen = props => {
           onSelect={() => {}}
         >
           <Button
-            title='Edit'
+            title="Edit"
             color={Colors.primary}
             onPress={() => {
               editProductHandler(item.id);
             }}
           />
-          <Button title='Delete' color={Colors.primary} onPress={() => {}} />
+          <Button
+            title="Delete"
+            color={Colors.primary}
+            onPress={() => {
+              dispatch(productActions.deleteProduct(item.id));
+            }}
+          />
         </ProductItem>
       )}
     />
@@ -45,7 +53,7 @@ UserProductsScreen.navigationOptions = navData => {
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
-          title='Menu'
+          title="Menu"
           iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
           onPress={() => {
             navData.navigation.toggleDrawer();
@@ -56,7 +64,7 @@ UserProductsScreen.navigationOptions = navData => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
-          title='Menu'
+          title="Menu"
           iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
           onPress={() => {
             navData.navigation.navigate('EditProduct');
