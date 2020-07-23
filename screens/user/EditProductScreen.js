@@ -1,14 +1,121 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  TextInput,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
-const EditProductScreen = () => {
+import HeaderButton from '../../components/UI/HeaderButton';
+
+const EditProductScreen = props => {
+  const prodId = props.navigation.getParam('productId');
+  const editProduct = useSelector(state =>
+    state.products.userProducts.find(prod => prod.id === prodId)
+  );
+
+  const [title, setTitle] = useState(editProduct ? editProduct.title : '');
+  const [imageUrl, setImageUrl] = useState(
+    editProduct ? editProduct.imageUrl : ''
+  );
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState(
+    editProduct ? editProduct.description : ''
+  );
+
   return (
-    <View>
-      <Text>The Edit Product Screen</Text>
-    </View>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+      }}
+    >
+      <ScrollView style={styles.screen}>
+        <View style={styles.form}>
+          <View style={styles.formControl}>
+            <Text style={styles.label}>Title</Text>
+            <TextInput
+              style={styles.input}
+              value={title}
+              onChangeText={text => setTitle(text)}
+            />
+          </View>
+          <View style={styles.formControl}>
+            <Text style={styles.label}>Image URL</Text>
+            <TextInput
+              style={styles.input}
+              value={imageUrl}
+              onChangeText={text => setImageUrl(text)}
+            />
+          </View>
+          {editProduct ? null : (
+            <View style={styles.formControl}>
+              <Text style={styles.label}>Price</Text>
+              <TextInput
+                style={styles.input}
+                value={price}
+                onChangeText={text => setPrice(text)}
+              />
+            </View>
+          )}
+          <View style={styles.formControl}>
+            <Text style={styles.label}>Description</Text>
+            <TextInput
+              style={styles.input}
+              value={description}
+              onChangeText={text => setDescription(text)}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </TouchableWithoutFeedback>
   );
 };
 
-const styles = StyleSheet.create({});
+EditProductScreen.navigationOptions = navData => {
+  return {
+    headerTitle: navData.navigation.getParam('productId')
+      ? 'Edit Product'
+      : 'Add Product',
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Save"
+          iconName={
+            Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'
+          }
+          onPress={() => {
+            navData.navigation.navigate('EditProduct');
+          }}
+        />
+      </HeaderButtons>
+    ),
+  };
+};
+
+const styles = StyleSheet.create({
+  form: {
+    margin: 20,
+  },
+  formControl: {
+    width: '100%',
+  },
+  label: {
+    fontFamily: 'open-sans-bold',
+    marginVertical: 10,
+  },
+  input: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 3,
+    paddingVertical: 9,
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+  },
+});
 
 export default EditProductScreen;
