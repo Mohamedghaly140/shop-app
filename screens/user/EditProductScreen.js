@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -28,6 +28,14 @@ const EditProductScreen = props => {
   const [description, setDescription] = useState(
     editProduct ? editProduct.description : ''
   );
+
+  const submitHandler = useCallback(() => {
+    console.log('Submitting');
+  }, []);
+
+  useEffect(() => {
+    props.navigation.setParams({ submit: submitHandler });
+  }, [submitHandler]);
 
   return (
     <TouchableWithoutFeedback
@@ -78,6 +86,7 @@ const EditProductScreen = props => {
 };
 
 EditProductScreen.navigationOptions = navData => {
+  const submitFunc = navData.navigation.getParam('submit');
   return {
     headerTitle: navData.navigation.getParam('productId')
       ? 'Edit Product'
@@ -89,9 +98,7 @@ EditProductScreen.navigationOptions = navData => {
           iconName={
             Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'
           }
-          onPress={() => {
-            navData.navigation.navigate('EditProduct');
-          }}
+          onPress={submitFunc}
         />
       </HeaderButtons>
     ),
