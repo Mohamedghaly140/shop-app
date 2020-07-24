@@ -16,7 +16,6 @@ import HeaderButton from '../../components/UI/HeaderButton';
 import * as productsActions from '../../store/actions/products';
 
 const EditProductScreen = props => {
-  const { navigation } = props;
   const prodId = props.navigation.getParam('productId');
   const editProduct = useSelector(state =>
     state.products.userProducts.find(prod => prod.id === prodId)
@@ -42,8 +41,8 @@ const EditProductScreen = props => {
         productsActions.createProduct(title, description, imageUrl, +price)
       );
     }
-    navigation.goBack();
-  }, [dispatch, navigation, prodId, title, description, imageUrl, price]);
+    props.navigation.goBack();
+  }, [dispatch, prodId, title, description, imageUrl, price]);
 
   useEffect(() => {
     props.navigation.setParams({ submit: submitHandler });
