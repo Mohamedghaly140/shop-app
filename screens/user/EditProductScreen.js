@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -8,12 +8,20 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../../components/UI/HeaderButton';
 import * as productsActions from '../../store/actions/products';
+
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+  }
+};
 
 const EditProductScreen = props => {
   const prodId = props.navigation.getParam('productId');
@@ -22,14 +30,21 @@ const EditProductScreen = props => {
   );
   const dispatch = useDispatch();
 
-  const [title, setTitle] = useState(editProduct ? editProduct.title : '');
-  const [imageUrl, setImageUrl] = useState(
-    editProduct ? editProduct.imageUrl : ''
-  );
-  const [price, setPrice] = useState('');
-  const [description, setDescription] = useState(
-    editProduct ? editProduct.description : ''
-  );
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      title: editProduct ? editProduct.title : '',
+      imageUrl: editProduct ? editProduct.imageUrl : '',
+      description: editProduct ? editProduct.description : '',
+      price: '',
+    },
+    inputValidities: {
+      title: editProduct ? true : false,
+      imageUrl: editProduct ? true : false,
+      description: editProduct ? true : false,
+      price: editProduct ? true : false,
+    },
+    formIsValid: editProduct ? true : false,
+  });
 
   const submitHandler = useCallback(() => {
     if (editProduct) {
@@ -48,6 +63,19 @@ const EditProductScreen = props => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
+  const titleChangeHandler = text => {
+    let isValid = false;
+    if (text.trim().length > 0) {
+      isValid = true;
+    }
+    dispatchFormState({
+      type: FORM_INPUT_UPDATE,
+      value: text,
+      isValid: isValid,
+      input: 'title',
+    });
+  };
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -61,8 +89,11 @@ const EditProductScreen = props => {
             <TextInput
               style={styles.input}
               value={title}
-              onChangeText={text => setTitle(text)}
+              onChangeText={titleChangeHandler}
+              keyboardType='default'
+              returnKeyType='next'
             />
+            {!titleIsValid && <Text>Please enter a valid title!</Text>}
           </View>
           <View style={styles.formControl}>
             <Text style={styles.label}>Image URL</Text>
@@ -70,6 +101,7 @@ const EditProductScreen = props => {
               style={styles.input}
               value={imageUrl}
               onChangeText={text => setImageUrl(text)}
+              returnKeyType='next'
             />
           </View>
           {editProduct ? null : (
@@ -79,6 +111,8 @@ const EditProductScreen = props => {
                 style={styles.input}
                 value={price}
                 onChangeText={text => setPrice(text)}
+                keyboardType='decimal-pad'
+                returnKeyType='next'
               />
             </View>
           )}
@@ -88,6 +122,7 @@ const EditProductScreen = props => {
               style={styles.input}
               value={description}
               onChangeText={text => setDescription(text)}
+              returnKeyType='next'
             />
           </View>
         </View>
@@ -105,7 +140,7 @@ EditProductScreen.navigationOptions = navData => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
-          title="Save"
+          title='Save'
           iconName={
             Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'
           }
