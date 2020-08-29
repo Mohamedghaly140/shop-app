@@ -15,6 +15,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../../components/UI/HeaderButton';
 import * as productsActions from '../../store/actions/products';
+import Input from '../../components/UI/Input';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -118,6 +119,21 @@ const EditProductScreen = props => {
     >
       <ScrollView style={styles.screen}>
         <View style={styles.form}>
+          <Input
+            label='Title'
+            errorText='Please enter a valid title'
+            keyboardType='default'
+            autoCapitalize='sentences'
+            autoCorrect
+            returnKeyType='next'
+          />
+          <Input
+            label='Image URL'
+            errorText='Please enter a valid image URL'
+            keyboardType='default'
+            returnKeyType='next'
+          />
+
           <View style={styles.formControl}>
             <Text style={styles.label}>Title</Text>
             <TextInput
@@ -141,24 +157,30 @@ const EditProductScreen = props => {
             />
           </View>
           {editProduct ? null : (
-            <View style={styles.formControl}>
-              <Text style={styles.label}>Price</Text>
-              <TextInput
-                style={styles.input}
-                value={formState.inputValues.price}
-                onChangeText={text => setPrice(text)}
-                keyboardType='decimal-pad'
-                returnKeyType='next'
-              />
-            </View>
+            <Input
+              label='Price'
+              errorText='Please enter a valid price'
+              keyboardType='decimal-pad'
+              returnKeyType='next'
+            />
           )}
+          <Input
+            label='Description'
+            errorText='Please enter a valid price'
+            keyboardType='decimal-pad'
+            returnKeyType='next'
+            multiline
+            numberOfLines={3}
+          />
           <View style={styles.formControl}>
             <Text style={styles.label}>Description</Text>
             <TextInput
               style={styles.input}
               value={formState.inputValues.description}
               onChangeText={text => setDescription(text)}
-              returnKeyType='next'
+              returnKeyType='done'
+              multiline
+              numberOfLines={3}
             />
           </View>
         </View>
@@ -190,20 +212,6 @@ EditProductScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
   form: {
     margin: 20,
-  },
-  formControl: {
-    width: '100%',
-  },
-  label: {
-    fontFamily: 'open-sans-bold',
-    marginVertical: 10,
-  },
-  input: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 3,
-    paddingVertical: 9,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
   },
 });
 
