@@ -67,6 +67,17 @@ const EditProductScreen = props => {
     formIsValid: editProduct ? true : false,
   });
 
+  useEffect(() => {
+    if (error) {
+      Alert.alert('An error occurred', error, [
+        { text: 'Dissmise', style: 'cancel' },
+      ]);
+    }
+    return () => {
+      cleanup;
+    };
+  }, [input]);
+
   const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
       Alert.alert('Wrong Inputs!', 'Please check the fields in the form', [
@@ -96,11 +107,11 @@ const EditProductScreen = props => {
           )
         );
       }
+      props.navigation.goBack();
     } catch (err) {
       setError(err.message);
     }
     setIsLoading(false);
-    props.navigation.goBack();
   }, [dispatch, prodId, formState]);
 
   useEffect(() => {
@@ -118,6 +129,14 @@ const EditProductScreen = props => {
     },
     [dispatchFormState]
   );
+
+  if (isLoading) {
+    return (
+      <View style={styles.centred}>
+        <ActivityIndicator size='large' color={Colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <TouchableWithoutFeedback
@@ -212,6 +231,11 @@ EditProductScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
   form: {
     margin: 20,
+  },
+  centred: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
