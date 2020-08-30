@@ -1,7 +1,7 @@
 export const ADD_ORDER = 'ADD_ORDER';
 
 export const addOrder = (cartItems, totalAmount) => {
-  return dispatch => {
+  return async dispatch => {
     const date = new Date();
     const response = await fetch(
       'https://shop-app-rn-4b023.firebaseio.com/orders/u1.json',
@@ -13,7 +13,7 @@ export const addOrder = (cartItems, totalAmount) => {
         body: JSON.stringify({
           cartItems,
           totalAmount,
-          date: date.toISOString()
+          date: date.toISOString(),
         }),
       }
     );
@@ -26,7 +26,12 @@ export const addOrder = (cartItems, totalAmount) => {
 
     dispatch({
       type: ADD_ORDER,
-      orderData: { id:resDtata.name, items: cartItems, amount: totalAmount, date: date },
-    })
-  }
+      orderData: {
+        id: resDtata.name,
+        items: cartItems,
+        amount: totalAmount,
+        date: date,
+      },
+    });
+  };
 };

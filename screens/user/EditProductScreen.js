@@ -15,6 +15,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../../components/UI/HeaderButton';
 import * as productsActions from '../../store/actions/products';
+import Colors from '../../constants/Color';
 import Input from '../../components/UI/Input';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
@@ -73,10 +74,7 @@ const EditProductScreen = props => {
         { text: 'Dissmise', style: 'cancel' },
       ]);
     }
-    return () => {
-      cleanup;
-    };
-  }, [input]);
+  }, [error]);
 
   const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {

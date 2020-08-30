@@ -24,7 +24,7 @@ export const fetchProducts = () => {
         loadedProducts.push(
           new Product(
             key,
-            'ui',
+            'u1',
             resDtata[key].title,
             resDtata[key].imageUrl,
             resDtata[key].description,
