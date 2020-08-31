@@ -19,7 +19,16 @@ export const signup = (email, password) => {
     );
 
     if (!response.ok) {
-      throw new Error('Something went wrong!');
+      const errorResData = await response.json();
+      const errorId = errorResData.error.message;
+      let message;
+      if (errorId === 'EMAIL_EXISTS') {
+        message = 'The email address is already in use by another account.';
+      } else if (errorId === 'TOO_MANY_ATTEMPTS_TRY_LATER') {
+        message =
+          'We have blocked all requests from this device due to unusual activity. Try again later.';
+      }
+      throw new Error(message);
     }
 
     const resData = await response.json();
@@ -46,7 +55,15 @@ export const login = (email, password) => {
     );
 
     if (!response.ok) {
-      throw new Error('Something went wrong!');
+      const errorResData = await response.json();
+      const errorId = errorResData.error.message;
+      let message;
+      if (errorId === 'EMAIL_NOT_FOUND') {
+        message = 'This email could not be found! Maybe Sign Up';
+      } else if (errorId === 'INVALID_PASSWORD') {
+        message = 'This password is not valid!';
+      }
+      throw new Error(message);
     }
 
     const resData = await response.json();
