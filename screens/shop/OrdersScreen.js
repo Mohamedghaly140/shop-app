@@ -66,6 +66,16 @@ const OrdersScreen = props => {
     );
   }
 
+  if (orders.length === 0) {
+    return (
+      <View style={styles.centred}>
+        <Text style={{ paddingHorizontal: 5, textAlign: 'center' }}>
+          No Orders found, Maybe start Ordering some products!
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={orders}

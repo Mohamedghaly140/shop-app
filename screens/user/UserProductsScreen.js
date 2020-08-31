@@ -1,5 +1,13 @@
 import React from 'react';
-import { FlatList, Platform, Button, Alert } from 'react-native';
+import {
+  FlatList,
+  Platform,
+  Button,
+  Alert,
+  View,
+  Text,
+  StyleSheet,
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
@@ -29,6 +37,14 @@ const UserProductsScreen = props => {
     ]);
   };
 
+  if (userProducts.length === 0) {
+    return (
+      <View style={styles.centred}>
+        <Text>No products found, Maybe start creating some!</Text>
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={userProducts}
@@ -43,14 +59,14 @@ const UserProductsScreen = props => {
           }}
         >
           <Button
-            title="Edit"
+            title='Edit'
             color={Colors.primary}
             onPress={() => {
               editProductHandler(item.id);
             }}
           />
           <Button
-            title="Delete"
+            title='Delete'
             color={Colors.primary}
             onPress={() => {
               deleteHandler(item.id);
@@ -68,7 +84,7 @@ UserProductsScreen.navigationOptions = navData => {
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
-          title="Menu"
+          title='Menu'
           iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
           onPress={() => {
             navData.navigation.toggleDrawer();
@@ -79,7 +95,7 @@ UserProductsScreen.navigationOptions = navData => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
-          title="Menu"
+          title='Menu'
           iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
           onPress={() => {
             navData.navigation.navigate('EditProduct');
@@ -89,5 +105,13 @@ UserProductsScreen.navigationOptions = navData => {
     ),
   };
 };
+
+const styles = StyleSheet.create({
+  centred: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export default UserProductsScreen;
